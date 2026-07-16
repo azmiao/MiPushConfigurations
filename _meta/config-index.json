@@ -1,7 +1,7 @@
 {
   "sourceRepo": "github:azmiao/MiPushConfigurations",
   "branch": "main",
-  "generatedAt": "2026-07-16T08:41:14.974668Z",
+  "generatedAt": "2026-07-16T09:04:51.669130Z",
   "files": [
     {
       "path": "0_基础配置_工具.json",
@@ -83,23 +83,16 @@
     {
       "path": "com.tencent.mobileqq_QQ.json",
       "name": "com.tencent.mobileqq_QQ",
-      "sha": "d6492dd924db53bb37c3ec6b6b63aeb9c1e73000d62c5dd083c54a27678bdaf6",
-      "size": 6375,
-      "updatedAt": "2026-07-16T16:41:00+08:00"
+      "sha": "0621b949891ef839b719da90996c661e2bc1a4dd6b0784ddda235e1802af311c",
+      "size": 6249,
+      "updatedAt": "2026-07-16T17:04:09+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_MessagingStyle.json",
       "name": "com.tencent.mobileqq_QQ_MessagingStyle",
-      "sha": "538dc869b7f798fa90e649bbbef488ded2aea30c55c2466a4f29749e0ac8be95",
-      "size": 3435,
-      "updatedAt": "2026-07-16T16:41:00+08:00"
-    },
-    {
-      "path": "com.tencent.mobileqq_QQ_含间隔符的群昵称提取首词.json",
-      "name": "com.tencent.mobileqq_QQ_含间隔符的群昵称提取首词",
-      "sha": "214c5be5e871ea06d29f15c76942004ffc7358f7fc87d724ba11ea3a94093e09",
-      "size": 152,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
+      "sha": "ad390264e750bf570a6d4cda23a1230d3ac5b3401222b2264385a2d6a1cd17ce",
+      "size": 2489,
+      "updatedAt": "2026-07-16T17:04:09+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_复用QA通知渠道.json",
@@ -111,23 +104,30 @@
     {
       "path": "com.tencent.mobileqq_QQ_意图重整.json",
       "name": "com.tencent.mobileqq_QQ_意图重整",
-      "sha": "c6730695a83d09b8723051c0040881fc0e7e5afe333f8115451e1c5971409b90",
-      "size": 1040,
-      "updatedAt": "2026-07-16T16:41:00+08:00"
+      "sha": "ee9dc7afe1235f1eec0e07910a9c3f1402c0f99e4cf6e925a9d14728c3bf75ed",
+      "size": 1025,
+      "updatedAt": "2026-07-16T17:04:09+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_群头像支持（不装则显示具体群友头像）.json",
       "name": "com.tencent.mobileqq_QQ_群头像支持（不装则显示具体群友头像）",
-      "sha": "59462f274692a552c230afa8bfd082475ca6f84f94e5bfd21d0d68b3c2fbd771",
-      "size": 463,
-      "updatedAt": "2026-07-16T16:41:00+08:00"
+      "sha": "6384a45ab3089ec828d8b95ed4fc125fe2d10de40a012c567dde6c9ed5920446",
+      "size": 411,
+      "updatedAt": "2026-07-16T17:04:09+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_群消息整形-群名标题前添加发送者.json",
       "name": "com.tencent.mobileqq_QQ_群消息整形-群名标题前添加发送者",
-      "sha": "7273a869c3ca48b973997da1705c9df8d0a8548d70b340a000b780c565fb9966",
-      "size": 738,
-      "updatedAt": "2026-07-16T16:41:00+08:00"
+      "sha": "60f4ee95b0e8d46a9e14162a272bd70ddbeac3b330bc20d0601f6aa407d6ee70",
+      "size": 544,
+      "updatedAt": "2026-07-16T17:04:09+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_群消息整形-群名移动至 subtext.json",
+      "name": "com.tencent.mobileqq_QQ_群消息整形-群名移动至 subtext",
+      "sha": "43ed33580d253b06df3ac0d5b55f26f77ef021724f68d981188f8d5384a77e17",
+      "size": 575,
+      "updatedAt": "2026-07-16T17:04:09+08:00"
     },
     {
       "path": "com.tencent.wework_企业微信.json",
