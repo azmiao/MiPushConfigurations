@@ -14,7 +14,7 @@
         "replace": {
           "metaInfo": {
             "extra": {
-              "intent_uri": "mqqwpa://im/chat?chat_type=group&open_type=chat&uin=${id}",
+              "intent_uri": "mqqwpa://im/chat?chat_type=group&uin=${id}",
               "notify_effect": "2"
             }
           }

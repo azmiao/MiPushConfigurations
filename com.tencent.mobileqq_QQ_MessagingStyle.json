@@ -21,13 +21,6 @@
           }
         ]
       ],
-      [
-        "cond",
-        [
-          "个人消息",
-          "将标题相同的通知视为同一会话"
-        ]
-      ],
       {
         "metaInfo": {
           "extra": {
@@ -80,28 +73,6 @@
           }
         ]
       ],
-      [
-        "cond",
-        [
-          "群组消息",
-          {
-            "metaInfo": {
-            "extra": {
-                "__mi_push_conversation_sender": "(?<prefix>\\[.*?\\])?t.me/",
-                "__mi_push_conversation_message": "(?<name>.*?): \\s*(?<content>[\\s\\S]*)"
-              }
-            },
-            "newMetaInfo": {
-              "extra": {
-                "__mi_push_conversation_sender": "${prefix}${name}",
-                "__mi_push_conversation_sender_id": "${name}",
-                "__mi_push_conversation_message": "${content}"
-              }
-            },
-            "stop": false
-          }
-        ]
-      ],
       {
         "name": "我的设备消息适配",
         "metaInfo": {
@@ -115,10 +86,7 @@
           }
         },
         "stop": false
-      },
-      "QQ-含间隔符的群昵称提取首词",
-      "QQ-[Messaging Style]个人、群组会话分离",
-      "[Messaging Style] 消息添加标识"
+      }
     ]
   }
 }

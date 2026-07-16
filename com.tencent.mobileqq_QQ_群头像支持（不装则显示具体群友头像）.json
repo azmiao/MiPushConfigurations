@@ -5,8 +5,7 @@
       {
         "metaInfo": {
           "extra": {
-            "intent_uri": "^(?!.*S\\.groupuin=).*S\\.groupcode=(?<id>\\d+)",
-             "__mi_push_use_messaging_style": null
+            "intent_uri": "^(?!.*S\\.groupuin=).*S\\.groupcode=(?<id>\\d+)"
           }
         },
         "newMetaInfo": {
