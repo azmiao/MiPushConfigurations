@@ -27,7 +27,7 @@ jobs:
   configs_validate:
     name: configs:validate
 
-    runs-on: magisk-local-linux
+    runs-on: ubuntu-latest
 
     container:
       image: python:3.13-slim
