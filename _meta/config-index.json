@@ -1,7 +1,7 @@
 {
   "sourceRepo": "github:azmiao/MiPushConfigurations",
   "branch": "main",
-  "generatedAt": "2026-07-16T03:03:06.381310Z",
+  "generatedAt": "2026-07-16T08:41:14.974668Z",
   "files": [
     {
       "path": "0_基础配置_工具.json",
@@ -60,52 +60,10 @@
       "updatedAt": "2026-07-16T10:05:46+08:00"
     },
     {
-      "path": "cmb.pb_招商银行.json",
-      "name": "cmb.pb_招商银行",
-      "sha": "42bd5f477646c9bd18f1d648b160b4ab6e476974c2992c48763ae1820704d00f",
-      "size": 3044,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "cmb.pb_招商银行_卡号替换.json",
-      "name": "cmb.pb_招商银行_卡号替换",
-      "sha": "d32dcdff804e947c126083c1f70e29188b8f467ab834e40e9913c3833af27abb",
-      "size": 630,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.alibaba.android.rimet_钉钉.json",
-      "name": "com.alibaba.android.rimet_钉钉",
-      "sha": "e5c9dc5ecc50e240d7807df30203740e362550555fdb13c5b116ee2290728eea",
-      "size": 2227,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.baidu.tieba_百度贴吧.json",
-      "name": "com.baidu.tieba_百度贴吧",
-      "sha": "edc900652a2591585397683c49ece05dd74c46d638c93bce56a69f97caf2cb92",
-      "size": 389,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
       "path": "com.coolapk.market_酷安.json",
       "name": "com.coolapk.market_酷安",
       "sha": "94de0b311e9cc39d8f828f5694ad022f51b5a6a3dc68654dea04f60e035c9201",
       "size": 774,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.jingyao.easybike_哈啰.json",
-      "name": "com.jingyao.easybike_哈啰",
-      "sha": "849f3560e98affa42af8e3ce0a64fa4b6d164404fff4ef078dd25c5541cf349d",
-      "size": 2484,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.sankuai.meituan_美团.json",
-      "name": "com.sankuai.meituan_美团",
-      "sha": "0dde6eb8ffd011c8f95e18ae1f4eb075d3d828f51caf3d6b266134d44937a754",
-      "size": 387,
       "updatedAt": "2026-07-16T10:05:46+08:00"
     },
     {
@@ -123,32 +81,18 @@
       "updatedAt": "2026-07-16T10:05:46+08:00"
     },
     {
-      "path": "com.ss.android.ugc.aweme_抖音.json",
-      "name": "com.ss.android.ugc.aweme_抖音",
-      "sha": "90ee1771a13858d3e9288b9519a0bcd337ae5a723f162b84643b424f428f600e",
-      "size": 3261,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.tencent.mobileqq_QQ-[Messaging Style]个人、群组会话分离.json",
-      "name": "com.tencent.mobileqq_QQ-[Messaging Style]个人、群组会话分离",
-      "sha": "78444788bf0b9f63d0287805f8da7ea8b1bcda0ccc6d233b4630983256e68b65",
-      "size": 168,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.tencent.mobileqq_QQ_.json",
-      "name": "com.tencent.mobileqq_QQ_",
-      "sha": "10a098a4919fc6340b4515fbcb9cf30ff441c0a0a33f7461be5750f6508ad021",
-      "size": 6508,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
+      "path": "com.tencent.mobileqq_QQ.json",
+      "name": "com.tencent.mobileqq_QQ",
+      "sha": "d6492dd924db53bb37c3ec6b6b63aeb9c1e73000d62c5dd083c54a27678bdaf6",
+      "size": 6375,
+      "updatedAt": "2026-07-16T16:41:00+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_MessagingStyle.json",
       "name": "com.tencent.mobileqq_QQ_MessagingStyle",
-      "sha": "1d09d16163a00a04b99962d41983c87d067061e73a74523d26b29ca9722b3c37",
-      "size": 3268,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
+      "sha": "538dc869b7f798fa90e649bbbef488ded2aea30c55c2466a4f29749e0ac8be95",
+      "size": 3435,
+      "updatedAt": "2026-07-16T16:41:00+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_含间隔符的群昵称提取首词.json",
@@ -167,36 +111,29 @@
     {
       "path": "com.tencent.mobileqq_QQ_意图重整.json",
       "name": "com.tencent.mobileqq_QQ_意图重整",
-      "sha": "ee9dc7afe1235f1eec0e07910a9c3f1402c0f99e4cf6e925a9d14728c3bf75ed",
-      "size": 1025,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.tencent.mobileqq_QQ_消息按群分组.json",
-      "name": "com.tencent.mobileqq_QQ_消息按群分组",
-      "sha": "87d13c0e3c93bb94d706c96b7fcfb1881df9e4fcb14494198ed9d1387a1baf38",
-      "size": 375,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
+      "sha": "c6730695a83d09b8723051c0040881fc0e7e5afe333f8115451e1c5971409b90",
+      "size": 1040,
+      "updatedAt": "2026-07-16T16:41:00+08:00"
     },
     {
       "path": "com.tencent.mobileqq_QQ_群头像支持（不装则显示具体群友头像）.json",
       "name": "com.tencent.mobileqq_QQ_群头像支持（不装则显示具体群友头像）",
-      "sha": "6384a45ab3089ec828d8b95ed4fc125fe2d10de40a012c567dde6c9ed5920446",
-      "size": 411,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
+      "sha": "59462f274692a552c230afa8bfd082475ca6f84f94e5bfd21d0d68b3c2fbd771",
+      "size": 463,
+      "updatedAt": "2026-07-16T16:41:00+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_群消息整形-群名标题前添加发送者.json",
+      "name": "com.tencent.mobileqq_QQ_群消息整形-群名标题前添加发送者",
+      "sha": "7273a869c3ca48b973997da1705c9df8d0a8548d70b340a000b780c565fb9966",
+      "size": 738,
+      "updatedAt": "2026-07-16T16:41:00+08:00"
     },
     {
       "path": "com.tencent.wework_企业微信.json",
       "name": "com.tencent.wework_企业微信",
       "sha": "38416a86f9816f101ca5774d2e8bb7a3ea581f862d5e5764c60b707c806faf5e",
       "size": 717,
-      "updatedAt": "2026-07-16T10:05:46+08:00"
-    },
-    {
-      "path": "com.xingin.xhs_小红书.json",
-      "name": "com.xingin.xhs_小红书",
-      "sha": "d9bad2beef08091bf2fac2f40c64c7f07bb694dcf71aaa9a444d629f71f06f22",
-      "size": 162,
       "updatedAt": "2026-07-16T10:05:46+08:00"
     },
     {
