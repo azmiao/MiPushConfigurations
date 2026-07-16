@@ -1,0 +1,153 @@
+{
+  "version": "0.1.0",
+  "configs": {
+    "抖音-会话概念修复": [
+      [
+        "cond",
+        [
+          {
+            "match": {
+              "pushAction": {
+                "message": {
+                  "payload": "item_type\\\":\\\"im_group"
+                }
+              }
+            }
+          },
+          "标记为群组消息"
+        ],
+        [
+          {
+            "match": {
+              "pushAction": {
+                "message": {
+                  "payload": "item_type\\\":\\\"im"
+                }
+              }
+            }
+          },
+          "标记为个人消息"
+        ]
+      ],
+      [
+        "cond",
+        [
+          "个人消息",
+          {
+            "replace": {
+              "metaInfo": {
+                "extra": {
+                  "channel_id": "im",
+                  "channel_name": "即时消息"
+                }
+              }
+            },
+            "stop": false
+          }
+        ],
+        [
+          "群组消息",
+          {
+            "replace": {
+              "metaInfo": {
+                "extra": {
+                  "channel_id": "im_group",
+                  "channel_name": "群聊消息"
+                }
+              }
+            },
+            "stop": false
+          }
+        ]
+      ],
+      {
+        "match": {
+          "pushAction": {
+            "message": {
+              "payload": "conv_short_id=(?<id>\\d+)"
+            }
+          }
+        },
+        "replace": {
+          "metaInfo": {
+            "notifyId": [
+              "hash",
+              [
+                "$",
+                "id"
+              ]
+            ],
+            "extra": {
+              "notification_group": null,
+              "__mi_push_conversation_id": "${id}"
+            }
+          }
+        },
+        "stop": false
+      },
+      {
+        "match": {
+          "pushAction": {
+            "message": {
+              "payload": "author_id\\\":(?<id>\\d+)"
+            }
+          }
+        },
+        "replace": {
+          "metaInfo": {
+            "extra": {
+              "__mi_push_conversation_sender_id": "${id}"
+            }
+          }
+        },
+        "stop": false
+      }
+    ],
+    "抖音-Messaging Style": [
+      "抖音-会话概念修复",
+      {
+        "match": {
+          "metaInfo": {
+            "description": "(?<name>.*?) 在群中@了你$"
+          }
+        },
+        "replace": {
+          "metaInfo": {
+            "title": "${name}",
+            "description": "${name}: 在群中@了你"
+          }
+        },
+        "stop": false
+      },
+      [
+        "cond",
+        [
+          "个人消息",
+          {
+            "metaInfo": {
+              "description": "^私信了你: (?<content>[\\s\\S]+)"
+            },
+            "newMetaInfo": {
+              "description": "${content}"
+            },
+            "stop": false
+          }
+        ]
+      ],
+      [
+        "cond",
+        [
+          "聊天消息",
+          "大图标显示成圆形"
+        ]
+      ],
+      "使用 Messaging Style",
+      "[Messaging Style] 大图标作为个人头像"
+    ],
+    "com.ss.android.ugc.aweme": [
+      "抖音-会话概念修复",
+      "抖音-Messaging Style",
+      "允许运营消息"
+    ]
+  }
+}

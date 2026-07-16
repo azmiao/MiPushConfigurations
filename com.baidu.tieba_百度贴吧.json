@@ -1,0 +1,18 @@
+﻿{
+  "version": "0.1.0",
+  "configs": 
+    {
+      "com.baidu.tieba": 
+        [
+          {
+            "name": "百度贴吧_特定通知渠道消息过滤",
+             "metaInfo": 
+                  {
+                    "extra": { "channel_name":"运营推送" }
+                  },
+              "operation": "ignore",
+              "stop": false
+            }
+        ]
+    }
+}

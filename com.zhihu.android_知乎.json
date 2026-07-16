@@ -1,0 +1,27 @@
+{
+    "version": "0.1.0",
+    "configs": {
+        "com.zhihu.android": [
+            {
+                "name": "特别关心设新渠道，并通知时亮屏",
+                "match": {
+                    "pushAction": {
+                        "message": {
+                            "payload": "(?<payload>[\\s\\S]+)"
+                        }
+                    }
+                },
+                "replace": {
+                    "metaInfo": {
+                        "extra": {
+                            "intent_uri": ["property", "url", ["parse-json", ["$", "payload"]]],
+                            "notify_effect": "2"
+                        }
+                    }
+                },
+                "stop": false
+            },
+            "直接打开意图"
+        ]
+    }
+}

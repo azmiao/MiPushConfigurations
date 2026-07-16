@@ -1,0 +1,158 @@
+{
+    "version": "0.1.1",
+    "configs": {
+        "tv.danmaku.bili": [
+            {
+                "name": "补款通知",
+                "metaInfo": {
+                    "title": "补款截止",
+                    "description": "截止补款"
+                },
+                "newMetaInfo": {
+                    "extra": {
+                        "channel_name": "补款通知",
+                        "channel_description": null,
+                        "channel_id": "bukuan",
+                        "notification_group": "补款通知"
+                }
+                },
+              "stop": false
+            },
+            {
+                "name": "收到评论回复通知",
+                "metaInfo": {
+                    "title": "【(?<user>.*)】回复了你的评论"
+                },
+                "newMetaInfo": {
+                    "title": "@${user} 回复了你的评论",
+                    "extra": {
+                        "channel_name": "评论回复",
+                        "channel_description": null,
+                        "channel_id": "comment_reply",
+                        "notification_group": "评论回复"
+                    }
+                },
+              "stop": false
+            },
+            {
+                "name": "动态通知",
+                "metaInfo": {
+                    "title": "收到了1条动态",
+                    "description": "(?<name>@.*)"
+                },
+                "newMetaInfo": {
+                    "title": "你关注的 ${name} 发布了动态～",
+                    "extra": {
+                        "channel_name": "你的关注",
+                        "channel_description": null,
+                        "channel_id": "normal_attention",
+                        "notification_group": "你的关注"
+                    }
+                },
+              "stop": false
+            },
+            {
+                "name": "直播通知",
+                "metaInfo": {
+                    "title": "你关注的【(?<up>.*)】正在直播~"
+                },
+                "newMetaInfo": {
+                    "title": "你关注的 @${up} 正在直播～",
+                    "extra": {
+                        "channel_name": "你的关注",
+                        "channel_description": null,
+                        "channel_id": "normal_attention",
+                        "notification_group": "你的关注"
+                    }
+                },
+              "stop": false
+            },
+            {
+                "name": "特别关注视频通知",
+                "metaInfo": {
+                    "title": "你特别关注的“(?<up>.*)”刚发了视频"
+                },
+                "newMetaInfo": {
+                    "title": "你特别关注的 @${up} 更新啦～",
+                    "extra": {
+                        "channel_name": "你的特别关注",
+                        "channel_description": null,
+                        "channel_id": "special_attention",
+                        "notification_group": "你的特别关注"
+                      }
+                },
+              "stop": false
+            },
+            {
+                "name": "关注视频通知",
+                "metaInfo": {
+                    "title": "(?<up>.*?):(?<end>.*)",
+                    "description": "你关注的up主更新啦～"
+                },
+                "newMetaInfo": {
+                    "title": "你关注的 @${up} 更新啦～",
+                    "description": "${end}",
+                    "extra": {
+                        "channel_name": "你的关注",
+                        "channel_description": null,
+                        "channel_id": "normal_attention",
+                        "notification_group": "你的关注"
+                  }
+                },
+              "stop": false
+            },
+            {
+                "name": "关注视频通知",
+                "metaInfo": {
+                    "title": "(?<up>.*?):(?<end>.*)",
+                    "description": "你关注的up主近期新作【(?<info>.*)】"
+                },
+                "newMetaInfo": {
+                    "title": "你关注的 @${up} 更新啦～",
+                    "description": "${end} (${info})",
+                    "extra": {
+                        "channel_name": "你的关注",
+                        "channel_description": null,
+                        "channel_id": "normal_attention",
+                        "notification_group": "你的关注"
+                    }
+                },
+              "stop": false
+            },
+            {
+                "name": "关注视频通知",
+                "metaInfo": {
+                    "title": "(?<up>.*?): (?<end>.*)",
+                    "description": "【(?<info>.*播放·.*点赞)】"
+                },
+                "newMetaInfo": {
+                    "title": "你关注的 @${up} 更新啦～",
+                    "description": "${end} (${info})",
+                    "extra": {
+                        "channel_name": "你的关注",
+                        "channel_description": null,
+                        "channel_id": "normal_attention",
+                        "notification_group": "你的关注"
+                    }
+                },
+              "stop": false
+            },
+            {
+                "name": "追剧更新通知",
+                "metaInfo": {
+                    "title": "^你追的"
+                },
+                "newMetaInfo": {
+                    "extra": {
+                        "channel_name": "你的关注",
+                        "channel_description": null,
+                        "channel_id": "normal_attention",
+                        "notification_group": "你的关注"
+                    }
+                },
+              "stop": false
+            },
+            "干掉运营消息"
+        ]
+    }
+}
