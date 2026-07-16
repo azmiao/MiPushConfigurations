@@ -1,80 +1,127 @@
-name: Configs Validate
+name: Configs Validate and Update Index
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - "**"
-    tags:
-      - "**"
+
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
 
+  workflow_dispatch:
+
 permissions:
-  contents: read
-  pull-requests: read
+  contents: write
 
 concurrency:
-  group: >-
-    ${{ github.workflow }}-${{ github.event_name }}-
-    ${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   configs_validate:
-    name: configs:validate
-
+    name: Validate configs and update index
     runs-on: ubuntu-latest
 
     container:
       image: python:3.13-slim
 
     steps:
-      - name: Determine whether pipeline should run
-        id: pipeline_gate
-        uses: actions/github-script@v7
-        with:
-          result-encoding: string
-          script: |
-            if (context.eventName !== "push") {
-              return "true";
-            }
-
-            if (context.ref.startsWith("refs/tags/")) {
-              return "true";
-            }
-
-            const branch = context.ref.replace("refs/heads/", "");
-            const { owner, repo } = context.repo;
-
-            const { data: pullRequests } = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: "open",
-              head: `${owner}:${branch}`,
-              per_page: 1
-            });
-
-            if (pullRequests.length > 0) {
-              core.info(
-                `Branch "${branch}" has an open pull request; skipping duplicate push validation.`
-              );
-              return "false";
-            }
-
-            return "true";
-
       - name: Checkout repository
-        if: steps.pipeline_gate.outputs.result == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # 允许后面的 git push 使用 GITHUB_TOKEN
+          persist-credentials: true
+
+      - name: Configure Debian mirrors
+        run: |
+          set -eu
+
+          sed -i \
+            -e 's#http://deb.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
+            -e 's#http://security.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
+            -e 's#http://deb.debian.org/debian#https://mirrors.tuna.tsinghua.edu.cn/debian#g' \
+            /etc/apt/sources.list /etc/apt/sources.list.d/*.sources \
+            2>/dev/null || true
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git
+
+      - name: Validate JSON files
+        run: |
+          python - <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          root = Path(".")
+
+          paths = sorted(root.glob("*.json"))
+          paths.extend(sorted(root.glob("icon/*.json")))
+          paths.extend(sorted(root.glob("_meta/*.json")))
+
+          failed = False
+
+          for path in paths:
+              try:
+                  json.loads(path.read_text(encoding="utf-8-sig"))
+                  print(f"OK: {path}")
+              except json.JSONDecodeError as error:
+                  failed = True
+                  print(
+                      f"ERROR: {path}:{error.lineno}:{error.colno}: "
+                      f"{error.msg}",
+                      file=sys.stderr,
+                  )
+              except UnicodeDecodeError as error:
+                  failed = True
+                  print(
+                      f"ERROR: {path}: invalid UTF-8: {error}",
+                      file=sys.stderr,
+                  )
+
+          if failed:
+              raise SystemExit("JSON validation failed")
+
+          print(f"Validated {len(paths)} JSON files")
+          PY
+
+      - name: Generate config index
+        run: |
+          python tools/build_index.py
+
+      # Pull Request 事件只校验及生成，不直接向 PR 分支推送。
+      # push 和手动运行时自动提交索引。
+      - name: Commit and push generated index
+        if: github.event_name != 'pull_request'
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: |
+          set -eu
+
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -- _meta/config-index.json
+
+          if git diff --cached --quiet; then
+            echo "Config index is already up to date."
+            exit 0
+          fi
+
+          git commit -m "chore: update config index [skip ci]"
+          git push origin "HEAD:${BRANCH_NAME}"
 
       - name: Generate ref slug
-        if: always() && steps.pipeline_gate.outputs.result == 'true'
+        if: always()
         id: ref_slug
         env:
           REF_NAME: ${{ github.head_ref || github.ref_name }}
@@ -91,47 +138,8 @@ jobs:
               output.write(f"value={ref_slug}\n")
           PY
 
-      - name: Configure Debian mirrors
-        if: steps.pipeline_gate.outputs.result == 'true'
-        run: |
-          set -eu
-          sed -i \
-            -e 's#http://deb.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
-            -e 's#http://security.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
-            -e 's#http://deb.debian.org/debian#https://mirrors.tuna.tsinghua.edu.cn/debian#g' \
-            /etc/apt/sources.list /etc/apt/sources.list.d/*.sources \
-            2>/dev/null || true
-
-      - name: Install dependencies
-        if: steps.pipeline_gate.outputs.result == 'true'
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends git
-
-      - name: Validate JSON files
-        if: steps.pipeline_gate.outputs.result == 'true'
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          root = Path(".")
-          paths = sorted(root.glob("*.json"))
-          paths.extend(sorted(root.glob("icon/*.json")))
-          paths.extend(sorted(root.glob("_meta/*.json")))
-
-          for path in paths:
-              json.loads(path.read_text(encoding="utf-8-sig"))
-
-          print(f"validated {len(paths)} json files")
-          PY
-
-      - name: Check generated index
-        if: steps.pipeline_gate.outputs.result == 'true'
-        run: python tools/build_index.py --check
-
       - name: Upload config index
-        if: always() && steps.pipeline_gate.outputs.result == 'true'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: MiPushConfigurations-index-${{ steps.ref_slug.outputs.value }}
