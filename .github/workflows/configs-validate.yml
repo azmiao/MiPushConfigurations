@@ -1,10 +1,8 @@
 name: Configs Validate and Update Index
 
 on:
-  # 支持手动触发
   workflow_dispatch:
 
-  # 配置文件发生变化时触发
   push:
     branches:
       - "**"
@@ -14,8 +12,8 @@ on:
       - "_meta/*.json"
       - "!_meta/config-index.json"
       - "tools/build_index.py"
+      - ".github/workflows/configs-validate.yml"
 
-  # Pull Request 中进行校验，但不直接推送
   pull_request:
     types:
       - opened
@@ -27,6 +25,7 @@ on:
       - "_meta/*.json"
       - "!_meta/config-index.json"
       - "tools/build_index.py"
+      - ".github/workflows/configs-validate.yml"
 
 permissions:
   contents: write
@@ -44,6 +43,12 @@ jobs:
 
     container:
       image: python:3.13-slim
+
+    # 关键修复：所有 run 命令都在仓库目录执行
+    defaults:
+      run:
+        shell: sh
+        working-directory: ${{ github.workspace }}
 
     steps:
       - name: Checkout repository
@@ -71,12 +76,19 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends git
 
-          # 容器中的仓库目录可能属于宿主机用户，
-          # 需要设置为 Git 安全目录。
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
+          echo "Git version:"
           git --version
-          git status --short
+
+          echo "Current directory:"
+          pwd
+
+          echo "Repository files:"
+          ls -la
+
+          echo "Repository status:"
+          git -C "$GITHUB_WORKSPACE" status --short
 
       - name: Validate JSON files
         run: |
@@ -90,8 +102,7 @@ jobs:
           paths = sorted(root.glob("*.json"))
           paths.extend(sorted(root.glob("icon/*.json")))
 
-          # config-index.json 是自动生成文件，不在生成前校验。
-          # 这样即使旧索引不存在或损坏，也可以重新生成。
+          # config-index.json 是自动生成的文件，不在生成前校验。
           paths.extend(
               path
               for path in sorted(root.glob("_meta/*.json"))
@@ -132,9 +143,11 @@ jobs:
 
       - name: Generate config index
         env:
-          # 显式传入分支，确保 push、PR 和手动触发均能正确识别。
           INDEX_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
+          set -eu
+
+          echo "Generating index for branch: $INDEX_BRANCH"
           python tools/build_index.py
 
       - name: Validate generated index
@@ -150,9 +163,15 @@ jobs:
                   f"Generated index does not exist: {index_path}"
               )
 
-          index = json.loads(
-              index_path.read_text(encoding="utf-8-sig")
-          )
+          try:
+              index = json.loads(
+                  index_path.read_text(encoding="utf-8-sig")
+              )
+          except json.JSONDecodeError as error:
+              raise SystemExit(
+                  f"Generated index is invalid JSON: "
+                  f"{error.lineno}:{error.colno}: {error.msg}"
+              ) from error
 
           required_keys = {
               "sourceRepo",
@@ -180,8 +199,6 @@ jobs:
           )
           PY
 
-      # 只有分支上的 push 或手动运行才提交。
-      # Pull Request 和 tag 上不执行推送。
       - name: Commit and push generated index
         if: >-
           github.event_name != 'pull_request' &&
@@ -201,6 +218,9 @@ jobs:
             echo "Config index is already up to date."
             exit 0
           fi
+
+          echo "Index changes:"
+          git diff --cached --stat
 
           git commit -m "chore: update config index [skip ci]"
           git push origin "HEAD:refs/heads/${BRANCH_NAME}"
@@ -237,10 +257,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: >-
-            MiPushConfigurations-index-${{
-              steps.artifact_name.outputs.value
-            }}
+          name: MiPushConfigurations-index-${{ steps.artifact_name.outputs.value }}
           path: _meta/config-index.json
           retention-days: 14
           if-no-files-found: warn
