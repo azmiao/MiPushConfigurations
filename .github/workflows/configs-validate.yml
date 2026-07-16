@@ -1,6 +1,7 @@
 name: Configs Validate and Update Index
 
 on:
+  # 支持手动触发
   workflow_dispatch:
 
   push:
@@ -31,64 +32,62 @@ permissions:
   contents: write
 
 concurrency:
-  group: >-
-    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   configs_validate:
     name: Validate configs and update index
 
+    # 使用 GitHub 托管 Runner
     runs-on: ubuntu-latest
 
-    container:
-      image: python:3.13-slim
-
-    # 关键修复：所有 run 命令都在仓库目录执行
     defaults:
       run:
-        shell: sh
+        shell: bash
         working-directory: ${{ github.workspace }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # build_index.py 需要通过 git log 获取文件更新时间
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Configure Debian mirrors
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Verify environment
         run: |
-          set -eu
-
-          sed -i \
-            -e 's#http://deb.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
-            -e 's#http://security.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
-            -e 's#http://deb.debian.org/debian#https://mirrors.tuna.tsinghua.edu.cn/debian#g' \
-            /etc/apt/sources.list \
-            /etc/apt/sources.list.d/*.sources \
-            2>/dev/null || true
-
-      - name: Install dependencies
-        run: |
-          set -eu
-
-          apt-get update
-          apt-get install -y --no-install-recommends git
-
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-          echo "Git version:"
-          git --version
+          set -euo pipefail
 
           echo "Current directory:"
           pwd
 
-          echo "Repository files:"
+          echo "Python version:"
+          python --version
+
+          echo "Git version:"
+          git --version
+
+          echo "Workspace contents:"
           ls -la
 
+          if [[ ! -d ".git" ]]; then
+            echo "::error::.git directory was not found after checkout"
+            exit 1
+          fi
+
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
           echo "Repository status:"
-          git -C "$GITHUB_WORKSPACE" status --short
+          git status --short
+
+          echo "Current commit:"
+          git rev-parse HEAD
 
       - name: Validate JSON files
         run: |
@@ -102,7 +101,7 @@ jobs:
           paths = sorted(root.glob("*.json"))
           paths.extend(sorted(root.glob("icon/*.json")))
 
-          # config-index.json 是自动生成的文件，不在生成前校验。
+          # 校验 _meta 中除自动生成索引外的其他 JSON。
           paths.extend(
               path
               for path in sorted(root.glob("_meta/*.json"))
@@ -113,7 +112,8 @@ jobs:
 
           for path in paths:
               try:
-                  json.loads(path.read_text(encoding="utf-8-sig"))
+                  text = path.read_text(encoding="utf-8-sig")
+                  json.loads(text)
                   print(f"OK: {path}")
               except json.JSONDecodeError as error:
                   failed = True
@@ -125,7 +125,7 @@ jobs:
               except UnicodeDecodeError as error:
                   failed = True
                   print(
-                      f"ERROR: {path}: invalid UTF-8: {error}",
+                      f"ERROR: {path}: not valid UTF-8: {error}",
                       file=sys.stderr,
                   )
               except OSError as error:
@@ -145,9 +145,9 @@ jobs:
         env:
           INDEX_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
-          set -eu
+          set -euo pipefail
 
-          echo "Generating index for branch: $INDEX_BRANCH"
+          echo "Generating index for branch: ${INDEX_BRANCH}"
           python tools/build_index.py
 
       - name: Validate generated index
@@ -156,21 +156,16 @@ jobs:
           import json
           from pathlib import Path
 
-          index_path = Path("_meta/config-index.json")
+          path = Path("_meta/config-index.json")
 
-          if not index_path.is_file():
-              raise SystemExit(
-                  f"Generated index does not exist: {index_path}"
-              )
+          if not path.is_file():
+              raise SystemExit(f"Generated index does not exist: {path}")
 
           try:
-              index = json.loads(
-                  index_path.read_text(encoding="utf-8-sig")
-              )
+              index = json.loads(path.read_text(encoding="utf-8-sig"))
           except json.JSONDecodeError as error:
               raise SystemExit(
-                  f"Generated index is invalid JSON: "
-                  f"{error.lineno}:{error.colno}: {error.msg}"
+                  f"{path}:{error.lineno}:{error.colno}: {error.msg}"
               ) from error
 
           required_keys = {
@@ -180,12 +175,12 @@ jobs:
               "files",
           }
 
-          missing_keys = required_keys - index.keys()
+          missing_keys = required_keys - set(index)
 
           if missing_keys:
-              names = ", ".join(sorted(missing_keys))
               raise SystemExit(
-                  f"Generated index is missing keys: {names}"
+                  "Generated index is missing keys: "
+                  + ", ".join(sorted(missing_keys))
               )
 
           if not isinstance(index["files"], list):
@@ -193,12 +188,35 @@ jobs:
                   'Generated index field "files" must be a list'
               )
 
+          required_file_keys = {
+              "path",
+              "name",
+              "sha",
+              "size",
+              "updatedAt",
+          }
+
+          for position, item in enumerate(index["files"]):
+              if not isinstance(item, dict):
+                  raise SystemExit(
+                      f"files[{position}] must be an object"
+                  )
+
+              missing_file_keys = required_file_keys - set(item)
+
+              if missing_file_keys:
+                  raise SystemExit(
+                      f"files[{position}] is missing keys: "
+                      + ", ".join(sorted(missing_file_keys))
+                  )
+
           print(
-              f"Generated index contains "
-              f"{len(index['files'])} files"
+              f"Generated index contains {len(index['files'])} files"
           )
           PY
 
+      # Pull Request 事件只校验和生成，不向来源分支推送。
+      # push 或在分支上手动运行时自动提交索引。
       - name: Commit and push generated index
         if: >-
           github.event_name != 'pull_request' &&
@@ -206,7 +224,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          set -eu
+          set -euo pipefail
 
           git config user.name "github-actions[bot]"
           git config user.email \
@@ -219,8 +237,9 @@ jobs:
             exit 0
           fi
 
-          echo "Index changes:"
+          echo "Generated index changes:"
           git diff --cached --stat
+          git diff --cached -- _meta/config-index.json
 
           git commit -m "chore: update config index [skip ci]"
           git push origin "HEAD:refs/heads/${BRANCH_NAME}"
@@ -235,22 +254,16 @@ jobs:
           import os
           import re
 
-          ref_name = os.environ.get("REF_NAME", "ref")
-
-          ref_slug = re.sub(
-              r"[^0-9a-z]+",
-              "-",
-              ref_name.lower(),
-          )
-
-          ref_slug = ref_slug.strip("-")[:63] or "ref"
+          ref_name = os.environ.get("REF_NAME") or "ref"
+          slug = re.sub(r"[^0-9a-z]+", "-", ref_name.lower())
+          slug = slug.strip("-")[:63] or "ref"
 
           with open(
               os.environ["GITHUB_OUTPUT"],
               "a",
               encoding="utf-8",
           ) as output:
-              output.write(f"value={ref_slug}\n")
+              output.write(f"value={slug}\n")
           PY
 
       - name: Upload config index
