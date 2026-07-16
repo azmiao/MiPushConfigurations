@@ -1,9 +1,0 @@
-{
-    "version": "0.1.0",
-    "configs": {
-        "com.xingin.xhs": [
-            "取 payload 作为 intent",
-            "直接打开意图"
-        ]
-    }
-}

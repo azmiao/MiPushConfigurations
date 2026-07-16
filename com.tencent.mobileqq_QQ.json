@@ -101,11 +101,8 @@
         "name": "文件、语音消息识别为好友消息",
         "metaInfo": {
           "description": "\\[文件\\]|\\[语音消息\\]",
-          "title": "(?<title>[\\s\\S]*)",
-              "extra": {
-                "channel_id": "^(?!.*(group_chat))"
-              }
-           },
+          "title": "(?<title>[\\s\\S]*)"
+        },
         "newMetaInfo": {
           "extra": {
             "channel_name": "好友消息",
@@ -217,6 +214,7 @@
       "QQ-复用QA通知渠道",
       "QQ-消息类型标记",
       "QQ-头像支持",
+      "QQ-MessagingStyle",
       {
         "name": "QQ 来电时自动唤醒和打开",
         "metaInfo": {
@@ -250,16 +248,9 @@
         "stop": false
       },
       "QQ-我的设备消息整形",
-      "QQ-MessagingStyle",
       "QQ-群消息整形",
       "QQ-屏蔽全体消息",
-      "QQ-意图重整",
-      "QQ-消息按群分组"
+      "QQ-意图重整"
     ]
   }
 }
-
-
-
-
-
