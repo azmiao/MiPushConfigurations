@@ -1,28 +1,45 @@
 name: Configs Validate and Update Index
 
 on:
+  # 支持手动触发
+  workflow_dispatch:
+
+  # 配置文件发生变化时触发
   push:
     branches:
       - "**"
+    paths:
+      - "*.json"
+      - "icon/*.json"
+      - "_meta/*.json"
+      - "!_meta/config-index.json"
+      - "tools/build_index.py"
 
+  # Pull Request 中进行校验，但不直接推送
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
-
-  workflow_dispatch:
+    paths:
+      - "*.json"
+      - "icon/*.json"
+      - "_meta/*.json"
+      - "!_meta/config-index.json"
+      - "tools/build_index.py"
 
 permissions:
   contents: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: >-
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   configs_validate:
     name: Validate configs and update index
+
     runs-on: ubuntu-latest
 
     container:
@@ -33,7 +50,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # 允许后面的 git push 使用 GITHUB_TOKEN
           persist-credentials: true
 
       - name: Configure Debian mirrors
@@ -44,13 +60,23 @@ jobs:
             -e 's#http://deb.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
             -e 's#http://security.debian.org/debian-security#https://mirrors.tuna.tsinghua.edu.cn/debian-security#g' \
             -e 's#http://deb.debian.org/debian#https://mirrors.tuna.tsinghua.edu.cn/debian#g' \
-            /etc/apt/sources.list /etc/apt/sources.list.d/*.sources \
+            /etc/apt/sources.list \
+            /etc/apt/sources.list.d/*.sources \
             2>/dev/null || true
 
       - name: Install dependencies
         run: |
+          set -eu
+
           apt-get update
           apt-get install -y --no-install-recommends git
+
+          # 容器中的仓库目录可能属于宿主机用户，
+          # 需要设置为 Git 安全目录。
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+          git --version
+          git status --short
 
       - name: Validate JSON files
         run: |
@@ -63,7 +89,14 @@ jobs:
 
           paths = sorted(root.glob("*.json"))
           paths.extend(sorted(root.glob("icon/*.json")))
-          paths.extend(sorted(root.glob("_meta/*.json")))
+
+          # config-index.json 是自动生成文件，不在生成前校验。
+          # 这样即使旧索引不存在或损坏，也可以重新生成。
+          paths.extend(
+              path
+              for path in sorted(root.glob("_meta/*.json"))
+              if path.name != "config-index.json"
+          )
 
           failed = False
 
@@ -84,6 +117,12 @@ jobs:
                       f"ERROR: {path}: invalid UTF-8: {error}",
                       file=sys.stderr,
                   )
+              except OSError as error:
+                  failed = True
+                  print(
+                      f"ERROR: unable to read {path}: {error}",
+                      file=sys.stderr,
+                  )
 
           if failed:
               raise SystemExit("JSON validation failed")
@@ -92,21 +131,69 @@ jobs:
           PY
 
       - name: Generate config index
+        env:
+          # 显式传入分支，确保 push、PR 和手动触发均能正确识别。
+          INDEX_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
           python tools/build_index.py
 
-      # Pull Request 事件只校验及生成，不直接向 PR 分支推送。
-      # push 和手动运行时自动提交索引。
+      - name: Validate generated index
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          index_path = Path("_meta/config-index.json")
+
+          if not index_path.is_file():
+              raise SystemExit(
+                  f"Generated index does not exist: {index_path}"
+              )
+
+          index = json.loads(
+              index_path.read_text(encoding="utf-8-sig")
+          )
+
+          required_keys = {
+              "sourceRepo",
+              "branch",
+              "generatedAt",
+              "files",
+          }
+
+          missing_keys = required_keys - index.keys()
+
+          if missing_keys:
+              names = ", ".join(sorted(missing_keys))
+              raise SystemExit(
+                  f"Generated index is missing keys: {names}"
+              )
+
+          if not isinstance(index["files"], list):
+              raise SystemExit(
+                  'Generated index field "files" must be a list'
+              )
+
+          print(
+              f"Generated index contains "
+              f"{len(index['files'])} files"
+          )
+          PY
+
+      # 只有分支上的 push 或手动运行才提交。
+      # Pull Request 和 tag 上不执行推送。
       - name: Commit and push generated index
-        if: github.event_name != 'pull_request'
+        if: >-
+          github.event_name != 'pull_request' &&
+          startsWith(github.ref, 'refs/heads/')
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
           set -eu
 
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add -- _meta/config-index.json
 
@@ -116,11 +203,11 @@ jobs:
           fi
 
           git commit -m "chore: update config index [skip ci]"
-          git push origin "HEAD:${BRANCH_NAME}"
+          git push origin "HEAD:refs/heads/${BRANCH_NAME}"
 
-      - name: Generate ref slug
+      - name: Generate artifact name
         if: always()
-        id: ref_slug
+        id: artifact_name
         env:
           REF_NAME: ${{ github.head_ref || github.ref_name }}
         run: |
@@ -129,10 +216,20 @@ jobs:
           import re
 
           ref_name = os.environ.get("REF_NAME", "ref")
-          ref_slug = re.sub(r"[^0-9a-z]+", "-", ref_name.lower())
+
+          ref_slug = re.sub(
+              r"[^0-9a-z]+",
+              "-",
+              ref_name.lower(),
+          )
+
           ref_slug = ref_slug.strip("-")[:63] or "ref"
 
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+          with open(
+              os.environ["GITHUB_OUTPUT"],
+              "a",
+              encoding="utf-8",
+          ) as output:
               output.write(f"value={ref_slug}\n")
           PY
 
@@ -140,7 +237,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: MiPushConfigurations-index-${{ steps.ref_slug.outputs.value }}
+          name: >-
+            MiPushConfigurations-index-${{
+              steps.artifact_name.outputs.value
+            }}
           path: _meta/config-index.json
           retention-days: 14
           if-no-files-found: warn
