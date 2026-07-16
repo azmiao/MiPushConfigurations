@@ -1,0 +1,245 @@
+{
+  "sourceRepo": "github:azmiao/MiPushConfigurations",
+  "branch": "main",
+  "generatedAt": "2026-07-16T03:03:06.381310Z",
+  "files": [
+    {
+      "path": "0_基础配置_工具.json",
+      "name": "0_基础配置_工具",
+      "sha": "ef1ee0d5a9e64488b3d256270b4b426fb65c80aa63ed25c7498623be26fa7670",
+      "size": 1400,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "0_基础配置_开关.json",
+      "name": "0_基础配置_开关",
+      "sha": "828d2776a983cf0d827f103b9961abce55e1434ae9f6dc23aeb279481808ee74",
+      "size": 3270,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "0_基础配置_消息样式相关.json",
+      "name": "0_基础配置_消息样式相关",
+      "sha": "42073802539357dbe5841dd92d38ead5e35848b426269f9904ca98d9277bdbc3",
+      "size": 3880,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "2_后置配置.json",
+      "name": "2_后置配置",
+      "sha": "30a8e15c8d89d07c310241956d484adecadbfbb28506fd9452a2b6098a80ffc6",
+      "size": 708,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "2_后置配置_无图标聊天消息显示名字为图标.json",
+      "name": "2_后置配置_无图标聊天消息显示名字为图标",
+      "sha": "6c4f915bd053852f43bef7e9558d72189d1ec3c719f42ec0e057bf5338126635",
+      "size": 497,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "2_后置配置_消息样式为每条消息添加起始标识.json",
+      "name": "2_后置配置_消息样式为每条消息添加起始标识",
+      "sha": "75e07e26283177a4f52c3dc485b4f7a2a9a3bbc9cc23c34ec36b6ef89f277450",
+      "size": 152,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "2_后置配置_移除通知副标题.json",
+      "name": "2_后置配置_移除通知副标题",
+      "sha": "918da019f2036c65d551d3eedc6d1f9ad53abcd94059cc7198270291fb645d7d",
+      "size": 113,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "2_后置配置_自动提取意图.json",
+      "name": "2_后置配置_自动提取意图",
+      "sha": "efb32c23a5d82997860d4b2bc648142a73f4ded6ed18c44d1fdbfb35256b487a",
+      "size": 114,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "cmb.pb_招商银行.json",
+      "name": "cmb.pb_招商银行",
+      "sha": "42bd5f477646c9bd18f1d648b160b4ab6e476974c2992c48763ae1820704d00f",
+      "size": 3044,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "cmb.pb_招商银行_卡号替换.json",
+      "name": "cmb.pb_招商银行_卡号替换",
+      "sha": "d32dcdff804e947c126083c1f70e29188b8f467ab834e40e9913c3833af27abb",
+      "size": 630,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.alibaba.android.rimet_钉钉.json",
+      "name": "com.alibaba.android.rimet_钉钉",
+      "sha": "e5c9dc5ecc50e240d7807df30203740e362550555fdb13c5b116ee2290728eea",
+      "size": 2227,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.baidu.tieba_百度贴吧.json",
+      "name": "com.baidu.tieba_百度贴吧",
+      "sha": "edc900652a2591585397683c49ece05dd74c46d638c93bce56a69f97caf2cb92",
+      "size": 389,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.coolapk.market_酷安.json",
+      "name": "com.coolapk.market_酷安",
+      "sha": "94de0b311e9cc39d8f828f5694ad022f51b5a6a3dc68654dea04f60e035c9201",
+      "size": 774,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.jingyao.easybike_哈啰.json",
+      "name": "com.jingyao.easybike_哈啰",
+      "sha": "849f3560e98affa42af8e3ce0a64fa4b6d164404fff4ef078dd25c5541cf349d",
+      "size": 2484,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.sankuai.meituan_美团.json",
+      "name": "com.sankuai.meituan_美团",
+      "sha": "0dde6eb8ffd011c8f95e18ae1f4eb075d3d828f51caf3d6b266134d44937a754",
+      "size": 387,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.ss.android.lark_飞书.json",
+      "name": "com.ss.android.lark_飞书",
+      "sha": "067b406f58f68e93d144d8b27bca9d33d2c898f5dcaa8fe1cec5bffb0c5b1500",
+      "size": 5812,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.ss.android.lark_飞书_MessagingStyle.json",
+      "name": "com.ss.android.lark_飞书_MessagingStyle",
+      "sha": "e93ab1c6bf8772f195c750e0e3dc2abec53c38f6534871d084de88b96be17232",
+      "size": 1134,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.ss.android.ugc.aweme_抖音.json",
+      "name": "com.ss.android.ugc.aweme_抖音",
+      "sha": "90ee1771a13858d3e9288b9519a0bcd337ae5a723f162b84643b424f428f600e",
+      "size": 3261,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ-[Messaging Style]个人、群组会话分离.json",
+      "name": "com.tencent.mobileqq_QQ-[Messaging Style]个人、群组会话分离",
+      "sha": "78444788bf0b9f63d0287805f8da7ea8b1bcda0ccc6d233b4630983256e68b65",
+      "size": 168,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_.json",
+      "name": "com.tencent.mobileqq_QQ_",
+      "sha": "10a098a4919fc6340b4515fbcb9cf30ff441c0a0a33f7461be5750f6508ad021",
+      "size": 6508,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_MessagingStyle.json",
+      "name": "com.tencent.mobileqq_QQ_MessagingStyle",
+      "sha": "1d09d16163a00a04b99962d41983c87d067061e73a74523d26b29ca9722b3c37",
+      "size": 3268,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_含间隔符的群昵称提取首词.json",
+      "name": "com.tencent.mobileqq_QQ_含间隔符的群昵称提取首词",
+      "sha": "214c5be5e871ea06d29f15c76942004ffc7358f7fc87d724ba11ea3a94093e09",
+      "size": 152,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_复用QA通知渠道.json",
+      "name": "com.tencent.mobileqq_QQ_复用QA通知渠道",
+      "sha": "211a6a3604ca388745b6ddf351d3dfef5fed9cc38dcb4d92257c770b64a048f3",
+      "size": 900,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_意图重整.json",
+      "name": "com.tencent.mobileqq_QQ_意图重整",
+      "sha": "ee9dc7afe1235f1eec0e07910a9c3f1402c0f99e4cf6e925a9d14728c3bf75ed",
+      "size": 1025,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_消息按群分组.json",
+      "name": "com.tencent.mobileqq_QQ_消息按群分组",
+      "sha": "87d13c0e3c93bb94d706c96b7fcfb1881df9e4fcb14494198ed9d1387a1baf38",
+      "size": 375,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.mobileqq_QQ_群头像支持（不装则显示具体群友头像）.json",
+      "name": "com.tencent.mobileqq_QQ_群头像支持（不装则显示具体群友头像）",
+      "sha": "6384a45ab3089ec828d8b95ed4fc125fe2d10de40a012c567dde6c9ed5920446",
+      "size": 411,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.tencent.wework_企业微信.json",
+      "name": "com.tencent.wework_企业微信",
+      "sha": "38416a86f9816f101ca5774d2e8bb7a3ea581f862d5e5764c60b707c806faf5e",
+      "size": 717,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.xingin.xhs_小红书.json",
+      "name": "com.xingin.xhs_小红书",
+      "sha": "d9bad2beef08091bf2fac2f40c64c7f07bb694dcf71aaa9a444d629f71f06f22",
+      "size": 162,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.xunmeng.pinduoduo_拼多多.json",
+      "name": "com.xunmeng.pinduoduo_拼多多",
+      "sha": "d422c270efab29eb05048cda61e91abb445399fedda94aff18252228039fea9d",
+      "size": 840,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "com.zhihu.android_知乎.json",
+      "name": "com.zhihu.android_知乎",
+      "sha": "4b7f07c99acb8c15c435f9ae3be6593ace7fa0d5b9ab3542eaf92684950be9ff",
+      "size": 797,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "icon/APP_NotifyIconsSupportConfig.json",
+      "name": "icon/APP_NotifyIconsSupportConfig",
+      "sha": "46ec48156511f248343100ee22cfed711cd555c496b6cd05eb3ae49603caca28",
+      "size": 1131187,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "icon/NotifyIconsSupportConfig.json",
+      "name": "icon/NotifyIconsSupportConfig",
+      "sha": "46ec48156511f248343100ee22cfed711cd555c496b6cd05eb3ae49603caca28",
+      "size": 1131187,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "icon/OS_MIUI_NotifyIconsSupportConfig.json",
+      "name": "icon/OS_MIUI_NotifyIconsSupportConfig",
+      "sha": "598cf022437ddb17675b767d327412d872fc361b8fb45dac38cabf4fa4565d03",
+      "size": 45415,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    },
+    {
+      "path": "tv.danmaku.bili_哔哩哔哩.json",
+      "name": "tv.danmaku.bili_哔哩哔哩",
+      "sha": "722c7107f34408963ad2265f435b1ce7a8eb796e244b6b0f14eb224442038d6e",
+      "size": 5948,
+      "updatedAt": "2026-07-16T10:05:46+08:00"
+    }
+  ]
+}
